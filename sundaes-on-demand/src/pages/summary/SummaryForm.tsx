@@ -1,14 +1,24 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, OverlayTrigger, Popover } from "react-bootstrap";
 
 const SummaryForm = () => {
   const [termsAndConditions, setTermsAndConditions] = useState<boolean>(false);
 
+  const popover = (
+    <Popover id='popover-basic'>
+      <Popover.Body>No ice cream will actually be delivered</Popover.Body>
+    </Popover>
+  );
+
   const checkboxLabel = (
     <label htmlFor='checkbox-terms-conditions'>
-      I agree to <a href='#'>Terms and Conditions</a>
+      I agree to{" "}
+      <OverlayTrigger placement='right' overlay={popover}>
+        <span style={{ color: "crimson" }}>Terms and Conditions</span>
+      </OverlayTrigger>
     </label>
   );
+
   return (
     <>
       <Form>
