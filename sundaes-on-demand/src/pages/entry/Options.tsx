@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ScoopOption from "./ScoopOption";
-import { Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import ToppingOption from "./ToppingOption";
 
 interface OptionsProps {
   optionType: string;
@@ -32,7 +33,19 @@ const Options = ({ optionType }: OptionsProps) => {
     <ScoopOption key={item.name} name={item.name} imagePath={item.imagePath} />
   ));
 
-  return <Row>{optionType === "scoops" ? optionItems : null}</Row>;
+  const toppingsItems = items.map((item) => (
+    <ToppingOption
+      key={item.name}
+      name={item.name}
+      imagePath={item.imagePath}
+    />
+  ));
+
+  return (
+    <Col>
+      <Row>{optionType === "scoops" ? optionItems : toppingsItems}</Row>
+    </Col>
+  );
 };
 
 export default Options;
