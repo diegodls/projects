@@ -28,8 +28,6 @@ const Options = ({ optionType }: OptionsProps) => {
       });
   }, [optionType]);
 
-  const ItemComponent = optionType === "scoops" ? ScoopOption : null;
-
   const optionItems = items.map((item) => (
     <ScoopOption key={item.name} name={item.name} imagePath={item.imagePath} />
   ));
