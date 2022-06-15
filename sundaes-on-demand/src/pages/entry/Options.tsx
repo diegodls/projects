@@ -27,7 +27,6 @@ const Options = ({ optionType }: OptionsProps) => {
         setError(false);
       })
       .catch((error) => {
-        console.log(error);
         setError(true);
       });
   }, [optionType]);
