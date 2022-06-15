@@ -3,6 +3,7 @@ import axios from "axios";
 import ScoopOption from "./ScoopOption";
 import { Col, Row } from "react-bootstrap";
 import ToppingOption from "./ToppingOption";
+import AlertBanner from "../../common/AlertBanner";
 
 interface OptionsProps {
   optionType: string;
@@ -16,18 +17,24 @@ interface ItemProps {
 const Options = ({ optionType }: OptionsProps) => {
   const [items, setItems] = useState<ItemProps[]>([]);
 
+  const [error, setError] = useState<boolean>(false);
+
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
       .then((response) => {
-        console.log(response.data);
         setItems(response.data);
+        setError(false);
       })
       .catch((error) => {
         console.log(error);
-        throw new Error(error);
+        setError(true);
       });
   }, [optionType]);
+
+  if (error) {
+    return <AlertBanner />;
+  }
 
   const optionItems = items.map((item) => (
     <ScoopOption key={item.name} name={item.name} imagePath={item.imagePath} />
