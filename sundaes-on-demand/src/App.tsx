@@ -1,12 +1,15 @@
-import Options from "./pages/entry/Options";
-import SummaryForm from "./pages/summary/SummaryForm";
+import { Container } from "react-bootstrap";
+import { OrderDetailsProvider } from "./contexts/OrderDetailsContext";
+import OrderEntry from "./pages/entry/OrderEntry";
 function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
-      <Options optionType='scoops' />
-      <SummaryForm />
-    </div>
+    <Container>
+      <OrderDetailsProvider>
+        {/* Summary page and entry page need provider */}
+        <OrderEntry />
+        {/* Confirmation page does not nee provider */}
+      </OrderDetailsProvider>
+    </Container>
   );
 }
 

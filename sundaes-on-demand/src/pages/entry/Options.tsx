@@ -4,9 +4,11 @@ import ScoopOption from "./ScoopOption";
 import { Col, Row } from "react-bootstrap";
 import ToppingOption from "./ToppingOption";
 import AlertBanner from "../../common/AlertBanner";
+import { PRICE_PER_ITEM } from "../../utils/constants";
+import { useOrderDetailsContext } from "../../contexts/OrderDetailsContext";
 
 interface OptionsProps {
-  optionType: string;
+  optionType: "scoops" | "toppings";
 }
 
 interface ItemProps {
@@ -18,6 +20,8 @@ const Options = ({ optionType }: OptionsProps) => {
   const [items, setItems] = useState<ItemProps[]>([]);
 
   const [error, setError] = useState<boolean>(false);
+
+  const [OrderDetailsContext, updateItemCount] = useOrderDetailsContext();
 
   useEffect(() => {
     axios
@@ -36,8 +40,19 @@ const Options = ({ optionType }: OptionsProps) => {
   }
 
   const optionItems = items.map((item) => (
-    <ScoopOption key={item.name} name={item.name} imagePath={item.imagePath} />
+    <ScoopOption
+      key={item.name}
+      name={item.name}
+      imagePath={item.imagePath}
+      updateItemCount={(itemName: string, newItemCount: string) =>
+        updateItemCount(itemName, newItemCount, optionType)
+      }
+    />
   ));
+
+  const title = `${optionType[0].toLocaleUpperCase} ${
+    optionType.slice(1).toLocaleUpperCase
+  }`;
 
   const toppingsItems = items.map((item) => (
     <ToppingOption
@@ -48,9 +63,11 @@ const Options = ({ optionType }: OptionsProps) => {
   ));
 
   return (
-    <Col>
+    <>
+      <h2>{title}</h2>
+      <p>{PRICE_PER_ITEM[optionType]} each</p>
       <Row>{optionType === "scoops" ? optionItems : toppingsItems}</Row>
-    </Col>
+    </>
   );
 };
 
