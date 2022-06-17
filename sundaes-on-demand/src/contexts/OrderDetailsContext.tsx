@@ -12,44 +12,42 @@ interface OrderDetailsProviderProps {
   children: ReactNode;
 }
 
-interface optionCountsProps {
-  [key: string]: Map<string, number>;
+interface OptionCountsProps {
+  [index: string]: Map<string, number>;
 }
 
 type OptionType = "scoops" | "toppings";
 
-interface optionCountsTotalProps {
+type OptionCountsTotalProps = {
   scoops: number;
   toppings: number;
   grandTotal: number;
-}
+};
 
-interface OrderDetailsContextData {
-  //optionCounts: optionCountsProps,
-  //totals: optionCountsTotalProps,
-  //updateItemCount: () => void;
-}
+type UpdateItemCount = (
+  itemName: string,
+  newItemCount: string,
+  optionType: OptionType
+) => void;
 
-const OrderDetailsContext = createContext({} as OrderDetailsContextData);
+type OrderDetailsContextData = [
+  {
+    scoops: OptionCountsProps;
+    toppings: OptionCountsProps;
+    totals: OptionCountsTotalProps;
+  },
+  UpdateItemCount
+];
 
-function useOrderDetails() {
-  const context = useContext(OrderDetailsContext);
+const OrderDetailsContext = createContext<OrderDetailsContextData | null>(null);
 
-  if (!context) {
-    throw new Error(
-      "OrderDetailsContext must be used within a OrderDetailsProvider"
-    );
-  }
-  return context;
-}
-
-function OrderDetailsProvider(props: OrderDetailsProviderProps) {
-  const [optionCounts, setOptionCounts] = useState<optionCountsProps>({
+function OrderDetailsProvider(props: any) {
+  const [optionCounts, setOptionCounts] = useState<OptionCountsProps>({
     scoops: new Map(),
     toppings: new Map(),
   });
 
-  const [totals, setTotals] = useState<optionCountsTotalProps>({
+  const [totals, setTotals] = useState<OptionCountsTotalProps>({
     scoops: 0,
     toppings: 0,
     grandTotal: 0,
@@ -57,7 +55,7 @@ function OrderDetailsProvider(props: OrderDetailsProviderProps) {
 
   function calculateSubTotal(
     optionType: OptionType,
-    optionCounts: optionCountsProps
+    optionCounts: OptionCountsProps
   ) {
     let optionCount: number = 0;
 
@@ -84,7 +82,7 @@ function OrderDetailsProvider(props: OrderDetailsProviderProps) {
       newItemCount: string,
       optionType: OptionType
     ) {
-      const newOptionCounts: optionCountsProps = { ...optionCounts };
+      const newOptionCounts: OptionCountsProps = { ...optionCounts };
       const optionCountsMap = optionCounts[optionType];
       optionCountsMap.set(itemName, parseInt(newItemCount));
       setOptionCounts(newOptionCounts);
@@ -95,4 +93,15 @@ function OrderDetailsProvider(props: OrderDetailsProviderProps) {
   return <OrderDetailsContext.Provider value={value} {...props} />;
 }
 
-export { useOrderDetails, OrderDetailsProvider };
+function useOrderDetailsContext() {
+  const context = useContext(OrderDetailsContext);
+
+  if (!context) {
+    throw new Error(
+      "OrderDetailsContext must be used within a OrderDetailsProvider"
+    );
+  }
+  return context;
+}
+
+export { useOrderDetailsContext, OrderDetailsProvider };
