@@ -6,6 +6,7 @@ import ToppingOption from "./ToppingOption";
 import AlertBanner from "../../common/AlertBanner";
 import { PRICE_PER_ITEM } from "../../utils/constants";
 import { useOrderDetailsContext } from "../../contexts/OrderDetailsContext";
+import { formatCurrency } from "../../utils/functions";
 
 interface OptionsProps {
   optionType: "scoops" | "toppings";
@@ -59,16 +60,11 @@ const Options = ({ optionType }: OptionsProps) => {
       key={item.name}
       name={item.name}
       imagePath={item.imagePath}
+      updateItemCount={(itemName: string, newItemCount: string) =>
+        updateItemCount(itemName, newItemCount, optionType)
+      }
     />
   ));
-
-  function formatCurrency(amount: number) {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-    }).format(amount);
-  }
 
   return (
     <>
