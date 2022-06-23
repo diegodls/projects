@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "../../../utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 import Options from "../Options";
 
@@ -17,9 +17,14 @@ describe("Testing totalUpdates", () => {
       name: "Vanilla",
     });
 
+    expect(vanillaInput).toBeInTheDocument();
+
     userEvent.clear(vanillaInput);
     userEvent.type(vanillaInput, "1");
-    expect(scoopsSubTotal).toHaveTextContent("2.00");
+
+    await waitFor(async () => {
+      expect(scoopsSubTotal).toHaveTextContent("2.00");
+    });
 
     //update chocolate scoops to 2 and check subtotal
     const chocolateInput = await screen.findByRole("spinbutton", {
@@ -29,6 +34,8 @@ describe("Testing totalUpdates", () => {
     userEvent.clear(chocolateInput);
     userEvent.type(chocolateInput, "2");
 
-    expect(scoopsSubTotal).toHaveTextContent("6.00");
+    await waitFor(async () => {
+      expect(scoopsSubTotal).toHaveTextContent("6.00");
+    });
   });
 });
