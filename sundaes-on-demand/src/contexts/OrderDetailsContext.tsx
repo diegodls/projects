@@ -1,16 +1,5 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { PRICE_PER_ITEM } from "../utils/constants";
-
-interface OrderDetailsProviderProps {
-  children: ReactNode;
-}
 
 interface OptionCountsProps {
   [index: string]: Map<string, number>;
@@ -59,22 +48,23 @@ function OrderDetailsProvider(props: any) {
   ) {
     let optionCount: number = 0;
 
-    for (let count of optionCounts[optionType].values()) {
+    for (const count of optionCounts[optionType].values()) {
       optionCount += count;
     }
-    return optionCount + PRICE_PER_ITEM[optionType];
+    return optionCount * PRICE_PER_ITEM[optionType];
   }
 
   useEffect(() => {
     const scoopsSubTotal: number = calculateSubTotal("scoops", optionCounts);
     const toppingSubTotal: number = calculateSubTotal("toppings", optionCounts);
     const grandTotal: number = scoopsSubTotal + toppingSubTotal;
+
     setTotals({
       scoops: scoopsSubTotal,
       toppings: toppingSubTotal,
       grandTotal,
     });
-  });
+  }, [optionCounts]);
 
   const value = useMemo(() => {
     function updateItemCount(
@@ -84,9 +74,14 @@ function OrderDetailsProvider(props: any) {
     ) {
       const newOptionCounts: OptionCountsProps = { ...optionCounts };
       const optionCountsMap = optionCounts[optionType];
-      optionCountsMap.set(itemName, parseInt(newItemCount));
+      const newItemCountVerification = isNaN(parseInt(newItemCount))
+        ? 0
+        : parseInt(newItemCount);
+      optionCountsMap.set(itemName, newItemCountVerification);
+
       setOptionCounts(newOptionCounts);
     }
+
     return [{ ...optionCounts, totals }, updateItemCount];
   }, [optionCounts, totals]);
 
