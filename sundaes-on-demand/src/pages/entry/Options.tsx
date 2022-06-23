@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ScoopOption from "./ScoopOption";
-import { Col, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import ToppingOption from "./ToppingOption";
 import AlertBanner from "../../common/AlertBanner";
 import { PRICE_PER_ITEM } from "../../utils/constants";
@@ -50,9 +50,9 @@ const Options = ({ optionType }: OptionsProps) => {
     />
   ));
 
-  const title = `${optionType[0].toLocaleUpperCase} ${
-    optionType.slice(1).toLocaleUpperCase
-  }`;
+  const title = `${optionType[0].toLocaleUpperCase()}${optionType
+    .slice(1)
+    .toLocaleUpperCase()}`;
 
   const toppingsItems = items.map((item) => (
     <ToppingOption
@@ -62,10 +62,21 @@ const Options = ({ optionType }: OptionsProps) => {
     />
   ));
 
+  function formatCurrency(amount: number) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+    }).format(amount);
+  }
+
   return (
     <>
       <h2>{title}</h2>
-      <p>{PRICE_PER_ITEM[optionType]} each</p>
+      <p>{formatCurrency(PRICE_PER_ITEM[optionType])} each</p>
+      <p>
+        {title} total: {formatCurrency(OrderDetailsContext.totals[optionType])}
+      </p>
       <Row>{optionType === "scoops" ? optionItems : toppingsItems}</Row>
     </>
   );
