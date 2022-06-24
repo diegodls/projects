@@ -41,8 +41,44 @@ describe("Testing totalUpdates", () => {
     });
   });
 
+  it("should update topping subtotal when topping changes", async () => {
+    render(<Options optionType={"toppings"} />);
+
+    //make sure total starts ou $0.00
+    const toppingSubTotal = screen.getByText("Toppings total: $", {
+      exact: false,
+    });
+    expect(toppingSubTotal).toHaveTextContent("0.00");
+
+    //update vanilla scoops to 1 and check the subtotal
+    const cherryCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+
+    expect(cherryCheckbox).toBeInTheDocument();
+
+    userEvent.click(cherryCheckbox);
+
+    await waitFor(async () => {
+      expect(toppingSubTotal).toHaveTextContent("1.50");
+    });
+
+    //update chocolate scoops to 2 and check subtotal
+    const hotFudgeCheckbox = await screen.findByRole("checkbox", {
+      name: "Hot Fudge",
+    });
+
+    expect(hotFudgeCheckbox).toBeInTheDocument();
+
+    userEvent.click(hotFudgeCheckbox);
+
+    await waitFor(async () => {
+      expect(toppingSubTotal).toHaveTextContent("3.00");
+    });
+  });
+
   it("should grand total starts at $0.00", () => {
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
 
     const grandTotal = screen.getByRole("heading", {
       name: /grand total: \$/i,
@@ -52,7 +88,7 @@ describe("Testing totalUpdates", () => {
   });
 
   it("should grand total updates properly if scoop is added first", async () => {
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const grandTotal = screen.getByRole("heading", {
       name: /grand total: \$/i,
     });
@@ -91,11 +127,19 @@ describe("Testing totalUpdates", () => {
     });
   });
 
-  it("should grand total updates properly if scoop is added first", async () => {
-    render(<OrderEntry />);
+  it("should grand total updates properly if topping is added first", async () => {
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const grandTotal = screen.getByRole("heading", {
       name: /grand total: \$/i,
     });
+
+    const cherryCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+
+    expect(cherryCheckbox).toBeInTheDocument();
+
+    userEvent.click(cherryCheckbox);
 
     const scoopsQuantity = 2;
 
@@ -110,17 +154,11 @@ describe("Testing totalUpdates", () => {
 
     await waitFor(async () => {
       expect(grandTotal).toHaveTextContent(
-        `${PRICE_PER_ITEM["scoops"] * scoopsQuantity}`
+        `${
+          PRICE_PER_ITEM["scoops"] * scoopsQuantity + PRICE_PER_ITEM["toppings"]
+        }`
       );
     });
-
-    const cherryCheckbox = await screen.findByRole("checkbox", {
-      name: "Cherries",
-    });
-
-    expect(cherryCheckbox).toBeInTheDocument();
-
-    userEvent.click(cherryCheckbox);
 
     await waitFor(async () => {
       expect(grandTotal).toHaveTextContent(
@@ -132,7 +170,7 @@ describe("Testing totalUpdates", () => {
   });
 
   it("should grand total updates properly after removing items", async () => {
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
 
     const grandTotal = screen.getByRole("heading", {
       name: /grand total: \$/i,
