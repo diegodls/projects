@@ -9,7 +9,7 @@ import SummaryForm from "../SummaryForm";
 
 describe("Testing SummaryForm", () => {
   it("should render initial conditions", () => {
-    render(<SummaryForm />);
+    render(<SummaryForm setOrderPhase={jest.fn()} />);
     const termsCheckBox = screen.getByRole("checkbox", {
       name: /I agree to Terms and Conditions/i,
     });
@@ -21,7 +21,7 @@ describe("Testing SummaryForm", () => {
   });
 
   it("should terms checkbox starts unchecked", () => {
-    render(<SummaryForm />);
+    render(<SummaryForm setOrderPhase={jest.fn()} />);
     const termsCheckBox = screen.getByRole("checkbox", {
       name: /I agree to Terms and Conditions/i,
     });
@@ -29,7 +29,7 @@ describe("Testing SummaryForm", () => {
   });
 
   it("should be able to confirm order when agreed with ther terms and conditions", () => {
-    render(<SummaryForm />);
+    render(<SummaryForm setOrderPhase={jest.fn()} />);
     const termsCheckBox = screen.getByRole("checkbox", {
       name: /I agree to Terms and Conditions/i,
     });
@@ -47,7 +47,7 @@ describe("Testing SummaryForm", () => {
   });
 
   it("should not be able to confirm order when disagree with the terms and conditions", () => {
-    render(<SummaryForm />);
+    render(<SummaryForm setOrderPhase={jest.fn()} />);
     const termsCheckBox = screen.getByRole("checkbox", {
       name: /I agree to Terms and Conditions/i,
     });
@@ -71,7 +71,7 @@ describe("Testing SummaryForm", () => {
   });
 
   it("should popover responds to hover", async () => {
-    render(<SummaryForm />);
+    render(<SummaryForm setOrderPhase={jest.fn()} />);
 
     const user = userEvent.setup();
 

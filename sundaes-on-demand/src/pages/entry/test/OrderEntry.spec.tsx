@@ -1,7 +1,6 @@
 import { render, screen, waitFor } from "../../../utils/testing-library-utils";
 
 import { rest } from "msw";
-import { OrderDetailsProvider } from "../../../contexts/OrderDetailsContext";
 import { server } from "../../../mocks/server";
 import OrderEntry from "../OrderEntry";
 
@@ -16,7 +15,7 @@ describe("Testing OrderEntry.tsx", () => {
       )
     );
 
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
 
     await waitFor(async () => {
       const alerts = await screen.findAllByRole("alert");
