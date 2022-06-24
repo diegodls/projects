@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button, Form, OverlayTrigger, Popover } from "react-bootstrap";
 
-const SummaryForm = () => {
+type OrderPhases = "INPROGRESS" | "REVIEW" | "COMPLETED";
+interface SummaryFormProps {
+  setOrderPhase: (orderPhase: OrderPhases) => void;
+}
+
+const SummaryForm = ({ setOrderPhase }: SummaryFormProps) => {
   const [termsAndConditions, setTermsAndConditions] = useState<boolean>(false);
 
   const popover = (
@@ -19,9 +24,18 @@ const SummaryForm = () => {
     </label>
   );
 
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setOrderPhase("COMPLETED");
+  }
+
   return (
     <>
-      <Form>
+      <Form
+        onSubmit={(e: React.FormEvent) => {
+          handleSubmit(e);
+        }}
+      >
         <Form.Group>
           <Form.Check
             type='checkbox'
