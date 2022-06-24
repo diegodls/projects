@@ -19,13 +19,16 @@ type UpdateItemCount = (
   optionType: OptionType
 ) => void;
 
+type resetOrder = () => void;
+
 type OrderDetailsContextData = [
   {
     scoops: OptionCountsProps;
     toppings: OptionCountsProps;
     totals: OptionCountsTotalProps;
   },
-  UpdateItemCount
+  UpdateItemCount,
+  resetOrder
 ];
 
 const OrderDetailsContext = createContext<OrderDetailsContextData | null>(null);
@@ -82,7 +85,14 @@ function OrderDetailsProvider(props: any) {
       setOptionCounts(newOptionCounts);
     }
 
-    return [{ ...optionCounts, totals }, updateItemCount];
+    function resetOrder() {
+      setOptionCounts({
+        scoops: new Map(),
+        toppings: new Map(),
+      });
+    }
+
+    return [{ ...optionCounts, totals }, updateItemCount, resetOrder];
   }, [optionCounts, totals]);
 
   return <OrderDetailsContext.Provider value={value} {...props} />;
