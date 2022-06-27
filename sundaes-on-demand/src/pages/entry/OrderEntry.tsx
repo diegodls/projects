@@ -21,7 +21,7 @@ const OrderEntry = ({ setOrderPhase }: OrderEntryProps) => {
       <Button
         variant='primary'
         type='submit'
-        disabled={OrderDetailsContext.totals.grandTotal < 1}
+        disabled={OrderDetailsContext.totals.grandTotal <= 0}
         onClick={() => {
           setOrderPhase("REVIEW");
         }}

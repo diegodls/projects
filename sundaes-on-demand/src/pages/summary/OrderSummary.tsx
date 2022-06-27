@@ -9,7 +9,7 @@ interface OrderSummaryProps {
 const OrderSummary = ({ setOrderPhase }: OrderSummaryProps) => {
   const [orderDetails] = useOrderDetailsContext();
 
-  const scoopArray = Array.from(Object.entries(orderDetails.scoops));
+  const scoopArray = Array.from(orderDetails.scoops.entries());
 
   const scoopList = scoopArray.map(([key, value]) => (
     <li key={key}>
@@ -17,7 +17,7 @@ const OrderSummary = ({ setOrderPhase }: OrderSummaryProps) => {
     </li>
   ));
 
-  const toppingArray = Array.from(Object.entries(orderDetails.toppings));
+  const toppingArray = Array.from(orderDetails.toppings.entries());
 
   const hasTopping = toppingArray.length > 0;
   let toppingDisplay = null;

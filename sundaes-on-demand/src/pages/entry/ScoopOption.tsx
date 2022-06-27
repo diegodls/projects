@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
 interface ScoopOptionsProps {
@@ -11,8 +12,21 @@ const ScoopOption = ({
   imagePath,
   updateItemCount,
 }: ScoopOptionsProps) => {
+  const [isQuantityValid, setIsQuantityValid] = useState<boolean>(true);
+
   function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    updateItemCount(name, e.target.value);
+    const currentValueFloat = parseFloat(e.target.value);
+
+    const isCurrentValueValid =
+      0 <= currentValueFloat &&
+      currentValueFloat <= 10 &&
+      Math.floor(currentValueFloat) === currentValueFloat;
+
+    setIsQuantityValid(isCurrentValueValid);
+
+    if (isCurrentValueValid) {
+      updateItemCount(name, e.target.value);
+    }
   }
 
   return (
@@ -34,6 +48,8 @@ const ScoopOption = ({
           <Form.Control
             type='number'
             defaultValue={0}
+            minLength={0}
+            isInvalid={!isQuantityValid}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               handleOnChange(e);
             }}

@@ -1,4 +1,5 @@
 import { render, screen } from "../../../utils/testing-library-utils";
+import userEvent from "@testing-library/user-event";
 import Options from "../Options";
 
 describe("Testing Options.tsx", () => {
@@ -31,5 +32,20 @@ describe("Testing Options.tsx", () => {
       "M&Ms topping",
       "Hot Fudge topping",
     ]);
+  });
+
+  it("should not be able to update Grand Total when the scoops amount is invalid", async () => {
+    render(<Options optionType={"scoops"} />);
+
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+
+    userEvent.clear(vanillaInput);
+    userEvent.type(vanillaInput, "-1");
+
+    // make sue scoops subtotal hasn't updated
+    const scoopsSubtotal = screen.getByText("SCOOPS total: $0.00");
+    expect(scoopsSubtotal).toBeInTheDocument();
   });
 });

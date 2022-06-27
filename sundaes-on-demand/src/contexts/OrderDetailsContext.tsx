@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { PRICE_PER_ITEM } from "../utils/constants";
 
-interface OptionCountsProps {
-  [index: string]: Map<string, number>;
-}
-
 type OptionType = "scoops" | "toppings";
+
+type OptionCountsMapProps = Map<string, number>;
+
+type OptionCountsProps = {
+  [type: string]: OptionCountsMapProps;
+};
 
 type OptionCountsTotalProps = {
   scoops: number;
@@ -23,8 +25,8 @@ type resetOrder = () => void;
 
 type OrderDetailsContextData = [
   {
-    scoops: OptionCountsProps;
-    toppings: OptionCountsProps;
+    scoops: OptionCountsMapProps;
+    toppings: OptionCountsMapProps;
     totals: OptionCountsTotalProps;
   },
   UpdateItemCount,

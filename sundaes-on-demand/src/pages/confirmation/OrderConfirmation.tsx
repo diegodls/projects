@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import { useOrderDetailsContext } from "../../contexts/OrderDetailsContext";
+import AlertBanner from "../../common/AlertBanner";
 type OrderPhases = "INPROGRESS" | "REVIEW" | "COMPLETED";
 
 interface OrderConfirmationProps {
@@ -11,17 +12,24 @@ interface OrderConfirmationProps {
 const OrderConfirmation = ({ setOrderPhase }: OrderConfirmationProps) => {
   const [, , resetOrder] = useOrderDetailsContext();
 
+  const [error, setError] = useState<boolean>(false);
+
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
   useEffect(() => {
     axios
       .post("http://localhost:3030/order")
       .then((response) => {
         setOrderNumber(response.data.orderNumber);
+        setError(false);
       })
       .catch((error) => {
-        //TODO: handle error
+        setError(true);
       });
   }, []);
+
+  if (error) {
+    return <AlertBanner />;
+  }
 
   function handleClick() {
     resetOrder();
