@@ -42,7 +42,7 @@ git clone https://github.com/diegodls/react_testing_library_jest.git
 ### <ul><li>Frontend</li></ul>
 Após clonar o projeto, navegue até a pasta ```sundaes-on-demand``` e na raiz, execute o comando : ```yarn``` (ou equivalente ao seu gerenciador de pacotes, como ```npm install```) para instalar os pacotes necessários.</br>
 Com os pacotes necessários instalados, execute o projeto utilizando o comando ```yarn start``` (ou ```npm start```).</br>
-O objetivo do projeto são os testes, então, continue seguindo os passos abaixos!</br>
+O objetivo do projeto são os testes, então, continue seguindo os passos abaixo!</br>
 
 ### <ul><li>Backend</li></ul>
 Faça o download do servidor [clicando aqui](https://github.com/bonnie/udemy-TESTING-LIBRARY/tree/main/sundae-server) e siga os passos presentes na pagina.</br>
